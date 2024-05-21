@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Component
 @AllArgsConstructor
@@ -22,28 +23,25 @@ public class ActorMovieClientHelper {
 
     private ActorMovieClient actorMovieClient;
 
-    public void getActorMovies(ActorDto actorDto) {
+    public Collection<MovieDto> getActorMovies(ActorDto actorDto) {
         try {
             ResponseEntity<Collection<MovieDto>> actorMoviesDtoResponseEntity = actorMovieClient.getActorMovies(actorDto.getId());
 
             if (actorMoviesDtoResponseEntity.hasBody()) {
-                actorDto.setMovies(actorMoviesDtoResponseEntity.getBody());
+                return actorMoviesDtoResponseEntity.getBody();
             }
+        } catch (FeignException fe) {
+            logger.error("Failed to fetch movies for actor {} with exception: {}", actorDto.getId(), fe.getMessage());
         }
-        catch(FeignException fe)
-        {
-            logger.error("Failed to fetch movies for actor {} with exception: {}",actorDto.getId(), fe.getMessage());
-        }
+
+        return Collections.emptyList();
     }
 
-    public void deleteActorMovies(Long id)
-    {
+    public void deleteActorMovies(Long id) {
         try {
             actorMovieClient.deleteActorMovieByActor(id);
-        }
-        catch(FeignException fe)
-        {
-            logger.error("Failed to delete movies for actor {} with exception: {}",id, fe.getMessage());
+        } catch (FeignException fe) {
+            logger.error("Failed to delete movies for actor {} with exception: {}", id, fe.getMessage());
         }
     }
 }

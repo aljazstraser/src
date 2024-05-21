@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Collection;
 
-@FeignClient(name="actor-movie")
+@FeignClient(name = "actor-movie")
 public interface ActorMovieClient {
 
-    @GetMapping("/api/v1/movies/{movieId}/actors")
+    @GetMapping("/api/v1/{movieId}/actors")
     ResponseEntity<Collection<ActorDto>> getMovieActors(@NotNull @PathVariable Long movieId);
 
-    @DeleteMapping("/api/v1/movies/{movieId}")
+    @DeleteMapping("/api/v1/{movieId}")
     ResponseEntity<Void> deleteActorMovieByMovie(@PathVariable @Valid Long movieId);
 
 }

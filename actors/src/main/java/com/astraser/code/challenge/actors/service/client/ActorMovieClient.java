@@ -4,17 +4,19 @@ import com.astraser.code.challenge.actors.dto.MovieDto;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Collection;
 
-@FeignClient(name="actor-movie")
+@FeignClient(name = "actor-movie")
 public interface ActorMovieClient {
 
-    @GetMapping("/api/v1/actors/{actorId}/movies")
+    @GetMapping("/api/v1/{actorId}/movies")
     ResponseEntity<Collection<MovieDto>> getActorMovies(@NotNull @PathVariable Long actorId);
 
-    @DeleteMapping("/api/v1/actors/{actorId}")
+    @DeleteMapping("/api/v1/{actorId}")
     ResponseEntity<Void> deleteActorMovieByActor(@NotNull @PathVariable Long actorId);
 
 

@@ -13,6 +13,7 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
+
   eurekaserver:
     image: "eureka:0.0.1-SNAPSHOT"
     container_name: eurekaserver-ms
@@ -33,6 +34,8 @@ services:
   actors:
     image: "actors:0.0.1-SNAPSHOT"
     container_name: actors-ms
+    ports:
+      - "8080:8080"
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -76,8 +79,6 @@ services:
       retries: 20
       start_period: 10s
     depends_on:
-      eurekaserver:
-        condition: service_healthy
       movies:
         condition: service_healthy
       actors:
@@ -111,3 +112,6 @@ services:
 networks:
   code-challenge:
     driver: "bridge"
+
+volumes:
+  keycloak-data:

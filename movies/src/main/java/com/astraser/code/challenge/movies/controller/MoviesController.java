@@ -18,19 +18,19 @@ public class MoviesController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> getMovie(@PathVariable @NotNull Long id, @RequestParam(defaultValue = "true") boolean includeActors) {
-        return ResponseEntity.status(HttpStatus.OK).body(moviesService.read(id,includeActors));
+        return ResponseEntity.status(HttpStatus.OK).body(moviesService.read(id, includeActors));
     }
 
     @PostMapping
     public ResponseEntity<MovieDto> createMovie(@RequestBody MovieDto movie) {
-        MovieDto movieDto =  moviesService.create(movie);
+        MovieDto movieDto = moviesService.create(movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieDto> updateMovie(@PathVariable @NotNull Long id, @RequestBody MovieDto actor) {
-        MovieDto actorDto = moviesService.update(id, actor);
-        return ResponseEntity.status(HttpStatus.OK).body(actorDto);
+    public ResponseEntity<Void> updateMovie(@PathVariable @NotNull Long id, @RequestBody MovieDto movie) {
+         moviesService.update(id, movie);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
@@ -41,13 +41,12 @@ public class MoviesController {
 
     @GetMapping("/list")
     private ResponseEntity<?> list(@RequestParam(required = false) Integer page,
-                                                @RequestParam(required = false) Integer size) {
-        if(page != null && size != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(moviesService.listPaginated(page,size));
+                                   @RequestParam(required = false) Integer size) {
+        if (page != null && size != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(moviesService.listPaginated(page, size));
         }
         return ResponseEntity.status(HttpStatus.OK).body(moviesService.list());
     }
-
 
 
 }
